@@ -21,4 +21,9 @@ public class StockTest {
         Quote end = new Quote("SPY", "20151202");
         assertEquals(-0.01020502060307829, Stock.calculateCumulativeReturn(start, end), 0.001);
     }
+
+    @Test
+    public void printCumulative() throws Exception {
+        System.out.println(new Stock("SPY", "20151201", "20151209").generateCumulativeReturnsCSV());
+    }
 }

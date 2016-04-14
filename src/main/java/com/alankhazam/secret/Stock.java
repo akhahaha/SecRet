@@ -15,6 +15,8 @@ import java.util.*;
  * Created by Alan on 4/13/2016.
  */
 class Stock {
+    private static final String CR_OUTPUT_DATE_FORMAT = "yyyy/MM/dd";
+
     String symbol;
     Date startDate;
     Date endDate;
@@ -79,6 +81,26 @@ class Stock {
         // Cumulative return = (current price - original price) / original price
         return (end.adjustedClose.doubleValue() - start.adjustedClose.doubleValue()) /
                 start.adjustedClose.doubleValue();
+    }
+
+    /**
+     * Returns the cumulative return values for all historical quotes against the earliest quote in CSV format.
+     */
+    public String generateCumulativeReturnsCSV() {
+        if (quotes == null || quotes.size() <= 1) {
+            return null;
+        }
+
+        List<String> points = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat(CR_OUTPUT_DATE_FORMAT);
+        Quote first = quotes.get(quotes.size() - 1);
+        for (int i = 0; i < quotes.size() - 1; i++) {
+            Quote quote = quotes.get(i);
+            points.add(symbol + ", " + sdf.format(startDate) + ", " + sdf.format(quote.date) + ", " +
+                    calculateCumulativeReturn(first, quote));
+        }
+
+        return String.join("\n", points);
     }
 
     @Override
