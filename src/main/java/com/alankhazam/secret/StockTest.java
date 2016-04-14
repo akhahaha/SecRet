@@ -14,4 +14,11 @@ public class StockTest {
         Stock stock = new Stock("SPY", "20151201", "20151209");
         assertEquals(7, stock.quotes.size());
     }
+
+    @Test
+    public void cumulative() throws Exception {
+        Quote start = new Quote("SPY", "20151201");
+        Quote end = new Quote("SPY", "20151202");
+        assertEquals(-0.01020502060307829, Stock.calculateCumulativeReturn(start, end), 0.001);
+    }
 }

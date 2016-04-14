@@ -5,6 +5,7 @@ import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,6 +56,29 @@ class Stock {
         for (HistoricalQuote quote : results) {
             quotes.add(new Quote(quote));
         }
+    }
+
+    /**
+     * Calculates the cumulative return (close-to-close, adjusted) across two quotes.
+     *
+     * @param start Start quote
+     * @param end   End quote
+     * @return Cumulative return (decimal)
+     */
+    public static double calculateCumulativeReturn(Quote start, Quote end) {
+        if (!start.symbol.equals(end.symbol)) {
+            throw new IllegalArgumentException("Quote symbols do not match");
+        }
+        if (start.date.equals(end.date) || start.date.after(end.date)) {
+            throw new IllegalArgumentException("Start quote cannot be after end quote");
+        }
+        if (start.adjustedClose.equals(BigDecimal.valueOf(0))) {
+            throw new IllegalArgumentException("Start close cannot be 0");
+        }
+
+        // Cumulative return = (current price - original price) / original price
+        return (end.adjustedClose.doubleValue() - start.adjustedClose.doubleValue()) /
+                start.adjustedClose.doubleValue();
     }
 
     @Override
