@@ -5,6 +5,7 @@ import org.apache.commons.cli.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.LogManager;
 
 public class Main {
     private final static String PROGRAM_NAME = "SecRet";
@@ -72,6 +73,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        // Disable logging
+        LogManager.getLogManager().reset();
+
         // Create options
         Options options = new Options();
 
